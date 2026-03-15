@@ -7,7 +7,6 @@ import {
     timestamp,
     varchar,
     jsonb,
-    relations,
 } from 'drizzle-orm/pg-core';
 
 /**
