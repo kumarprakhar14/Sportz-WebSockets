@@ -66,6 +66,21 @@ matchRouter.post("/", async (req, res) => {
             status,
         }).returning()
 
+        // if broadcastMatchCreated(event) function throws error
+        // handle it in its own try-catch
+        if (res.app.locals.broadcastMatchCreated) {
+            try {
+                const broadcastResult = res.app.locals.broadcastMatchCreated(event);
+                if (broadcastResult && typeof broadcastResult.catch === 'function') {
+                    broadcastResult.catch((err) => {
+                        console.error("Failed to broadcast match created event:", err);
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to broadcast match created event:", err);
+            }
+        }
+
         res.status(201).json({ data: event })
     } catch (e) {
         res.status(500).json({ error: "Failed to create match.", details: e.message })
