@@ -17,11 +17,11 @@ export function getMatchStatus(startTime, endTime, now = new Date()) {
         return MATCH_STATUS.SCHEDULED;
     }
 
-    if (now >= end) {
+    else if (now >= end) {
         return MATCH_STATUS.FINISHED;
     }
 
-    return MATCH_STATUS.LIVE;
+    else return MATCH_STATUS.LIVE;
 }
 
 export async function syncMatchStatus(match, updateStatus) {

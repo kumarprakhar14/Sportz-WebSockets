@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http'
 import { matchRouter } from './routes/matches.routes.js';
 import { attachWebSocketServer } from './websocket/server.js';
+import { securityMiddleware } from './config/arcjet.js';
 
 const PORT = Number(process.env.PORT || 8000);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -16,6 +17,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the Sports API!' });
 });
+
+// Security middleware
+app.use(securityMiddleware())
 
 app.use('/matches', matchRouter)
 
