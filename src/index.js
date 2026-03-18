@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http'
 import { matchRouter } from './routes/matches.routes.js';
 import { attachWebSocketServer } from './websocket/server.js';
+import { securityMiddleware } from './config/arcjet.js';
 
 const PORT = Number(process.env.PORT || 8000);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -11,6 +12,9 @@ const server = http.createServer(app)
 
 // JSON middleware
 app.use(express.json());
+
+// Security middleware
+app.use(securityMiddleware())
 
 // Root GET route
 app.get('/', (req, res) => {
