@@ -13,13 +13,13 @@ const server = http.createServer(app)
 // JSON middleware
 app.use(express.json());
 
+// Security middleware
+app.use(securityMiddleware())
+
 // Root GET route
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the Sports API!' });
 });
-
-// Security middleware
-app.use(securityMiddleware())
 
 app.use('/matches', matchRouter)
 
