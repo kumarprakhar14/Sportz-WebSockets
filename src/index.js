@@ -3,6 +3,7 @@ import http from 'http'
 import { matchRouter } from './routes/matches.routes.js';
 import { attachWebSocketServer } from './websocket/server.js';
 import { securityMiddleware } from './config/arcjet.js';
+import { commentaryRouter } from './routes/commentary.js';
 
 const PORT = Number(process.env.PORT || 8000);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -13,8 +14,9 @@ const server = http.createServer(app)
 // JSON middleware
 app.use(express.json());
 
-// Security middleware
-app.use(securityMiddleware())
+// Security middleware -> disable for development as cURL requests are blocked 
+// by arcjet
+// app.use(securityMiddleware())
 
 // Root GET route
 app.get('/', (req, res) => {
@@ -22,9 +24,11 @@ app.get('/', (req, res) => {
 });
 
 app.use('/matches', matchRouter)
+app.use('/matches/:id/commentary', commentaryRouter)
 
-const { broadcastMatchCreated } = attachWebSocketServer(server)
+const { broadcastMatchCreated, broadcastCommentary } = attachWebSocketServer(server)
 app.locals.broadcastMatchCreated = broadcastMatchCreated
+app.locals.broadcastCommentary = broadcastCommentary
 
 // Start server
 server.listen(PORT, HOST, () => {
